@@ -1,0 +1,370 @@
+/* =========================================================================
+   真夜 · 个人博客 — 简洁分栏卡片风格
+   ========================================================================= */
+
+:root {
+  --c-bg: #14151c;
+  --c-panel: rgba(255, 255, 255, 0.06);
+  --c-panel-border: rgba(255, 255, 255, 0.10);
+  --c-text: #eceef2;
+  --c-text-dim: #a9acb8;
+  --c-accent: #6fa8ff;
+  --c-gold: #e8c46b;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --font-sans: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--c-bg);
+  color: var(--c-text);
+  position: relative;
+}
+
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url('/static/images/bg_main.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.site-bg-mask {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(12, 13, 18, 0.55);
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+main { position: relative; z-index: 1; }
+
+.card {
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 32px;
+  margin-bottom: 24px;
+}
+.card:last-child { margin-bottom: 0; }
+
+/* ============================= HEADER ============================= */
+.site-header {
+  position: sticky;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  background: rgba(20, 21, 28, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--c-panel-border);
+}
+.nav-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  object-fit: cover;
+}
+.brand-name { font-weight: 700; font-size: 1rem; }
+.nav-links { display: flex; gap: 4px; }
+.nav-links a {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--c-text-dim);
+  transition: all 0.2s ease;
+}
+.nav-links a:hover { color: var(--c-text); background: rgba(255,255,255,0.06); }
+.nav-links a.active { color: var(--c-text); background: rgba(111,168,255,0.14); }
+.nav-toggle { display: none; background: none; border: none; color: var(--c-text); font-size: 1.3rem; }
+
+@media (max-width: 700px) {
+  .nav-links {
+    position: fixed;
+    top: 58px; right: 16px; left: 16px;
+    background: rgba(20,21,28,0.97);
+    border: 1px solid var(--c-panel-border);
+    border-radius: var(--radius-md);
+    flex-direction: column;
+    padding: 8px;
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+  .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .nav-links a { padding: 12px 14px; }
+  .nav-toggle { display: block; }
+}
+
+/* ============================= 独立板块切换（View Switching） ============================= */
+.view-page {
+  display: none;
+  min-height: calc(100vh - 63px);
+  animation: viewFadeIn 0.35s ease;
+}
+.view-page.active { display: block; }
+@keyframes viewFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================= SECTION / LAYOUT ============================= */
+.page-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px 40px;
+}
+
+/* 顶部简介卡片 */
+.intro-section { padding-top: 48px; }
+.intro-card { text-align: center; padding: 44px 32px; }
+.intro-avatar {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 16px;
+}
+.intro-name { font-size: 1.6rem; margin: 0 0 8px; font-weight: 700; }
+.intro-desc { margin: 0; color: var(--c-text-dim); font-size: 0.95rem; }
+.intro-desc-sub { margin: 4px 0 0; color: var(--c-text-dim); font-size: 0.85rem; }
+
+.card-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.2rem;
+  margin: 0 0 6px;
+}
+.card-title i { color: var(--c-accent); }
+.card-subtitle { color: var(--c-text-dim); font-size: 0.85rem; margin: 0 0 20px; }
+
+/* ============================= MUSIC ============================= */
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+.track-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--c-panel-border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  text-align: left;
+  color: var(--c-text);
+  transition: border-color 0.2s ease;
+}
+.track-card:hover, .track-card.active { border-color: var(--c-accent); }
+.track-cover-wrap { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1/1; margin-bottom: 10px; }
+.track-cover { width: 100%; height: 100%; object-fit: cover; }
+.track-video-badge {
+  position: absolute; top: 6px; right: 6px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem;
+}
+.track-play-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.3);
+  color: #fff; font-size: 1.3rem;
+  opacity: 0; transition: opacity 0.2s ease;
+}
+.track-card:hover .track-play-overlay { opacity: 1; }
+.track-card.active .track-play-overlay { opacity: 1; color: var(--c-accent); }
+.track-title { font-weight: 600; margin: 0; font-size: 0.92rem; }
+.track-duration { font-size: 0.75rem; color: var(--c-text-dim); margin: 2px 0 0; }
+
+/* ============================= ABOUT / TEXT BLOCKS ============================= */
+.about-line { margin: 0 0 6px; color: var(--c-text-dim); font-size: 0.92rem; }
+.about-line strong { color: var(--c-text); }
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.tag-chip {
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(111,168,255,0.1);
+  border: 1px solid rgba(111,168,255,0.25);
+  color: var(--c-accent);
+}
+.plain-list { padding-left: 18px; margin: 10px 0; }
+.plain-list li {
+  font-size: 0.9rem; line-height: 1.75;
+  color: var(--c-text-dim);
+  margin-bottom: 6px;
+}
+
+/* 竞赛 / 实习子模块 */
+.sub-block { padding: 18px 0; border-top: 1px solid var(--c-panel-border); }
+.sub-block:first-of-type { border-top: none; padding-top: 6px; }
+.sub-period { color: var(--c-text-dim); font-size: 0.78rem; margin: 0 0 4px; }
+.sub-title { font-size: 1.1rem; margin: 0 0 4px; }
+.sub-subtitle { color: var(--c-accent); font-size: 0.9rem; margin: 0 0 6px; }
+.sub-role { font-size: 0.85rem; color: var(--c-text-dim); margin: 0 0 10px; }
+.sub-result { font-size: 0.85rem; font-weight: 600; color: var(--c-gold); margin: 8px 0 0; }
+
+/* 获奖列表 */
+.awards-list { display: flex; flex-direction: column; }
+.award-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--c-panel-border);
+  font-size: 0.85rem;
+}
+.award-row:first-child { border-top: none; }
+.award-year { color: var(--c-text-dim); font-variant-numeric: tabular-nums; }
+.award-name { color: var(--c-text); }
+.award-level {
+  font-size: 0.72rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 999px;
+  background: rgba(232,196,107,0.12);
+  color: var(--c-gold);
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .award-row { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* ============================= FOOTER ============================= */
+.site-footer {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--c-text-dim);
+  font-size: 0.8rem;
+  position: relative; z-index: 1;
+}
+
+/* ============================= MINI PLAYER (左下角悬浮) ============================= */
+.mini-player {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 200;
+}
+.mini-toggle {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--c-panel-border);
+  overflow: hidden;
+  padding: 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.mini-cover-icon { width: 100%; height: 100%; object-fit: cover; }
+.mini-player.open .mini-toggle { display: none; }
+
+.mini-panel {
+  display: none;
+  width: 260px;
+  background: rgba(24, 25, 33, 0.92);
+  border: 1px solid var(--c-panel-border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(14px);
+  padding: 14px;
+  box-shadow: 0 10px 34px rgba(0,0,0,0.5);
+}
+.mini-player.open .mini-panel { display: block; }
+
+.mini-panel-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.mini-cover { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.mini-info { flex: 1; min-width: 0; }
+.mini-title { margin: 0; font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-artist { margin: 2px 0 0; font-size: 0.72rem; color: var(--c-text-dim); }
+.mini-close { background: none; border: none; color: var(--c-text-dim); font-size: 0.85rem; flex-shrink: 0; }
+
+.mini-progress-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.mini-time { font-size: 0.68rem; color: var(--c-text-dim); min-width: 28px; font-variant-numeric: tabular-nums; }
+.mini-progress, .mini-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  outline: none;
+}
+.mini-progress { flex: 1; }
+.mini-progress::-webkit-slider-thumb, .mini-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  cursor: pointer;
+}
+.mini-progress::-moz-range-thumb, .mini-volume::-moz-range-thumb {
+  width: 11px; height: 11px; border: none; border-radius: 50%;
+  background: var(--c-accent); cursor: pointer;
+}
+
+.mini-controls { display: flex; align-items: center; gap: 8px; }
+.mini-ctrl {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--c-panel-border);
+  color: var(--c-text);
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+}
+.mini-ctrl-main {
+  width: 36px; height: 36px;
+  background: var(--c-accent);
+  color: #14151c;
+  font-size: 0.9rem;
+}
+.mini-ctrl-mv { background: rgba(111,168,255,0.15); color: var(--c-accent); }
+.mini-volume-wrap { display: flex; align-items: center; gap: 6px; color: var(--c-text-dim); margin-left: auto; font-size: 0.72rem; }
+.mini-volume { width: 46px; }
+
+@media (max-width: 480px) {
+  .mini-panel { width: calc(100vw - 40px); }
+}
+
+/* ============================= MV MODAL ============================= */
+.mv-modal {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.mv-modal.open { display: flex; }
+.mv-modal-inner { position: relative; max-width: 380px; width: 100%; }
+.mv-modal-inner video {
+  width: 100%; max-height: 80vh;
+  border-radius: var(--radius-md);
+  background: #000;
+}
+.mv-close {
+  position: absolute; top: -44px; right: 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--c-panel-border);
+  color: #fff; width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--c-bg); }
+::-webkit-scrollbar-thumb { background: var(--c-panel-border); border-radius: 999px; }
